@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  webserver01:
+    container_name: webserver01
+    hostname: webserver01
+    image: "golang:alpine"
+    # ports:
+    #   - "8080:8080"
+    volumes:
+      - ./webserver:/code:ro
+    environment:
+     - PORT=8080
+    command: go run /code/main.go
+  webserver02:
+    container_name: webserver02
+    hostname: webserver02
+    image: "golang:alpine"
+    volumes:
+      - ./webserver:/code:ro
+    environment:
+     - PORT=8080
+    command: go run /code/main.go
+  webserver03:
+    container_name: webserver03
+    hostname: webserver03
+    image: "golang:alpine"
+    volumes:
+      - ./webserver:/code:ro
+    environment:
+     - PORT=8080
+    command: go run /code/main.go
+  loadbalancer:
+    container_name: loadbalancer
+    hostname: loadbalancer
+    image: "nginx:alpine"
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./nginx:/etc/nginx:ro
+    command: [nginx-debug, '-g', 'daemon off;']
